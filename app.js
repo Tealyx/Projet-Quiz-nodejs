@@ -1,3 +1,39 @@
+// JS pour le back-end
+
+const path = require("path"); //Importation du module path
+const express = require("express"); //Importation du module express
+const app = express(); //Création de son application c'est-à-dire son projet
+const port = 3000;
+
+
+app.set('views', path.join(__dirname, 'views')); //Définie le nom qui sera utilisé et load les fichiers
+
+app.use(express.static(path.join(__dirname,"public"))); //Permet d'automatiquement load ces fichiers. Pour utiliser les fichiers de public dans d'autres fichiers il sera uniquement nécessaire de les appeler depuis la racine public
+
+
+
+app.get('/', (req,res) =>{
+  res.render('home');
+});
+
+
+
+
+
+app.listen(port, ()=>{
+  console.log(`App listening on port ${port}`)
+})
+
+
+
+
+
+
+
+
+
+
+/*
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -39,3 +75,5 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+*/
