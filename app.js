@@ -1,21 +1,32 @@
 // JS pour le back-end
 
 const path = require("path"); //Importation du module path
+const {engine} = require("express-handlebars")
 const express = require("express"); //Importation du module express
 const app = express(); //Création de son application c'est-à-dire son projet
 const port = 3000;
 
-
+app.engine('handlebars',engine());
+app.set('view engine','handlebars');
 app.set('views', path.join(__dirname, 'views')); //Définie le nom qui sera utilisé et load les fichiers
+
+
+
 
 app.use(express.static(path.join(__dirname,"public"))); //Permet d'automatiquement load ces fichiers. Pour utiliser les fichiers de public dans d'autres fichiers il sera uniquement nécessaire de les appeler depuis la racine public
 
 
 
-app.get('/', (req,res) =>{
-  res.render('home');
+app.get('/about',(req,res)=>{
+  res.render('about',{title:'About'});
 });
 
+
+app.get('/', (req,res) =>{
+  res.render('home',{
+    title:'Home', //paramètre title pour nomme le nom de la page selon ce qu'on veut 
+  });
+});
 
 
 
