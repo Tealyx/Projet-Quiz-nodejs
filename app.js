@@ -1,4 +1,4 @@
-// JS pour le back-end
+// Fichier Javascript pour le back-end
 
 const path = require("path"); //Importation du module path
 const {engine} = require("express-handlebars")
@@ -17,8 +17,8 @@ app.use(express.static(path.join(__dirname,"public"))); //Permet d'automatiqueme
 
 
 
-app.get('/about',(req,res)=>{
-  res.render('about',{title:'About'});
+app.get('/about',(req,res)=>{ //Attribut à l'adresse /about le fichier about se trouvant dans le dossier "views". Si le dossier ne s'appelle pas "views" il faudra préciser le chemin. 
+  res.render('about',{title:'About'}); 
 });
 
 
