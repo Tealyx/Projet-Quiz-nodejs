@@ -8,7 +8,8 @@
 </head>
 <body>
     <header id="Header">{{>header}}</header> <!--{{> header}} sera remplacé par le contenu de header.handlebars. ">" signifie que le fichier se trouve dans le dossier partials (c'est une convention de handlebars-->
-    <main>{{{body}}}</main> <!--Tout contenu passé en paramètres est remplacé par body-->
-    <footer id="Footer">{{> footer}}</footer> <!--Sait automatiquement avec > que le fichier footer se trouve dans le dossier "partias"-->
+    <main id="Main">{{{body}}}</main> <!--Tout contenu passé en paramètres est remplacé par body-->
+    <footer id="Footer" class="">{{> footer}}</footer> <!--Sait automatiquement avec > que le fichier footer se trouve dans le dossier "partias"-->
 </body>
+<script src="/javascripts/main.js"></script> 
 </html>
