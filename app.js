@@ -3,8 +3,12 @@
 const path = require("path"); //Importation du module path
 const {engine} = require("express-handlebars")
 const express = require("express"); //Importation du module express
+const mysql = require("mysql");
+
 const app = express(); //Création de son application c'est-à-dire son projet
 const port = 3000;
+
+
 
 app.engine('handlebars',engine());
 app.set('view engine','handlebars');
@@ -27,6 +31,12 @@ app.get('/', (req,res) =>{
     title:'Home', //paramètre title pour nomme le nom de la page selon ce qu'on veut 
   });
 });
+
+
+
+//Connexion à MySQL
+const db = mysql.createConnection({   host: "localhost",   user: "root",   password: "MySQL" });
+db.connect(function(err) {   if (err) throw err;   console.log("Connecté à la base de données MySQL!"); });
 
 
 
