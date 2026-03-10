@@ -145,6 +145,22 @@ footer{
   border: 1px solid black;
 }
 
+
+/*Page BDD*/
+
+#reload{
+  margin: 3px;
+  width: 50dvh;
+}
+
+#reload_span{
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+}
+
+
 /* ↓ Aspect esthétique des tableaux ↓ */
 
 table {

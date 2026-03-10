@@ -1,9 +1,11 @@
+// backstick : `${}`
 // Fichier Javascript pour le back-end
-
+// ligne a supp pour test
 const path = require("path"); //Importation du module path
 const {engine} = require("express-handlebars")
 const express = require("express"); //Importation du module express
 const mysql = require("mysql");
+const { Sequelize } = require('sequelize');
 
 const app = express(); //Création de son application c'est-à-dire son projet
 const port = 3000;
@@ -21,8 +23,8 @@ app.use(express.static(path.join(__dirname,"public"))); //Permet d'automatiqueme
 
 
 
-app.get('/about',(req,res)=>{ //Attribut à l'adresse /about le fichier about se trouvant dans le dossier "views". Si le dossier ne s'appelle pas "views" il faudra préciser le chemin. 
-  res.render('about',{title:'About'}); 
+app.get('/bdd',(req,res)=>{ //Attribut à l'adresse /about le fichier about se trouvant dans le dossier "views". Si le dossier ne s'appelle pas "views" il faudra préciser le chemin. 
+  res.render('bdd',{title:'bdd'}); 
 });
 
 
@@ -35,15 +37,44 @@ app.get('/', (req,res) =>{
 
 
 //Connexion à MySQL
-const db = mysql.createConnection({   host: "localhost",   user: "root",   password: "MySQL" });
-db.connect(function(err) {   if (err) throw err;   console.log("Connecté à la base de données MySQL!"); });
+const db = mysql.createConnection({
+    host: "localhost",   
+    user: "root",   
+    password: "password",
+    database: "Projet_techno_du_web_L1" //ligne à rajouter après avoir créé la base de données 
+  });
+db.connect(function(err) {   if (err) throw err;   console.log("Connecté à la base de données MySQL!"); }); //Vérification que la connexion est bien établie
+// Si erreur : éxecuter les requêtes suivant dans MySQL Workbench :
+//ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+//flush privileges;
+//Si ca ne marche pas, essayer sans la partie @'localhost'.
+
+//Création de la base de données :
+//db.query("CREATE DATABASE Projet_techno_du_web_L1", function (err, result) {if (err) throw err;console.log("Database created");});
+
+//Création d'une table au sein de cette base de données :
+//db.query("CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, prénom VARCHAR(255), Nom VARCHAR(255), Age INT )",function(err,result){if (err) throw err;console.log("Table created")});
 
 
+//fonction d'ajout d'un utilisateur dans la table users :
+const ajout_utilisateur = function(prenom, nom, age) {
+  db.query(
+    `INSERT INTO users (prénom, Nom, Age) VALUES ('${prenom}','${nom}',${age})`,
+    [prenom, nom, age],
+    function(err, result) {
+      if (err) throw err;
+      console.log('1 record inserted');
+    }
+  );
+};
+
+
+ajout_utilisateur("Paul","Dupont",35)
 
 
 app.listen(port, ()=>{
   console.log(`App listening on port ${port}`)
-})
+});
 
 
 
