@@ -3,7 +3,6 @@ html{
   height: 100%;
 }
 
-
 body {
   padding: 50px;
   margin: 0;
@@ -12,10 +11,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-}
-
-a {
-  color: #00B7FF;
 }
 
 header{
@@ -30,7 +25,7 @@ header{
 
 header button,a{
   height: 100%;
-  color: blue;
+  color: black;
   margin: 2px; 
   text-align: center;
   background-color: white;
@@ -65,6 +60,7 @@ header button:hover{
   text-align: center;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   color: darkblue;
+  padding: 5px;
 }
 
 #div_menu{
@@ -78,12 +74,23 @@ header button:hover{
 
 }
 
+h1{
+  justify-content: center;
+  align-items: center;
+}
+
+h2{
+  color: darkblue;
+}
 
 main{
   min-height: 80dvh;
   display: flex;
   flex-direction: column;
   position: relative;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 
@@ -110,6 +117,13 @@ footer{
   margin: 3px;
 }
 
+
+/*Def de la classe Commande */
+
+.command{
+  text-align: center;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 
 /* Affichage de Header, Main et Footer quand click sur le bouton structure de la page*/
 .show-header-label::before { /*::before permet de créer un élément qui sera le premier enfant de l'élément concerné*/
@@ -206,4 +220,30 @@ tfoot td {
 
 /* ↑ Aspect esthétique des tableaux ↑ */
 
+/*Page d'inscription*/
 
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  background-color: rgb(240 240 240);
+}
+
+form input,
+form label {
+  margin-bottom: 12px;
+}
+
+#btn-login{
+  color: blue;
+  text-decoration: underline;
+}
+
+#btn-register{
+  color: blue;
+  text-decoration: underline;
+}

@@ -6,4 +6,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET quiz page. */
+router.get('/quiz', function(req, res, next) {
+  res.render('quiz', { title: 'Quiz' });
+});
+
+/* GET login page. */
+router.get('/login', function(req, res, next) {
+  res.render('login', { title: 'Login' });
+});
+
+/* GET register page. */
+router.get('/register', function(req, res, next) {
+  res.render('register', { title: 'Register' });
+});
+
 module.exports = router;
