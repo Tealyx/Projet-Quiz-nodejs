@@ -31,11 +31,18 @@ buttonAddQuestion.addEventListener("click", function() {
 
     bloc.appendChild(select);
 
+    // conteneur pour les champs dynamiques
+    const champs = document.createElement("div");
+
+    bloc.appendChild(champs);
+
     const zone = document.getElementById("zoneQuestions");
     zone.appendChild(bloc);
 
     // quand on choisit un type
     select.addEventListener("change", function() {
+
+        champs.innerHTML = "";
 
         if (select.value === "ouverte") {
 
@@ -49,10 +56,11 @@ buttonAddQuestion.addEventListener("click", function() {
 
             const validateButton = document.createElement("button");
             validateButton.textContent = "Valider";
+            validateButton.type = "button";
 
-            bloc.appendChild(questionInput);
-            bloc.appendChild(answerInput);
-            bloc.appendChild(validateButton);
+            champs.appendChild(questionInput);
+            champs.appendChild(answerInput);
+            champs.appendChild(validateButton);
 
             validateButton.addEventListener("click", function() {
 
@@ -80,7 +88,7 @@ buttonAddQuestion.addEventListener("click", function() {
                 })
 
                 console.log(question, answer);
-                
+
             });
 
         }
@@ -91,7 +99,7 @@ buttonAddQuestion.addEventListener("click", function() {
             questionInput.type = "text";
             questionInput.placeholder = "Ecris la question";
 
-            bloc.appendChild(questionInput);
+            champs.appendChild(questionInput);
 
             // bouton Oui
             const radioOui = document.createElement("input");
@@ -109,16 +117,17 @@ buttonAddQuestion.addEventListener("click", function() {
             const labelNon = document.createElement("label");
             labelNon.textContent = "Non";
 
-            bloc.appendChild(radioOui);
-            bloc.appendChild(labelOui);
+            champs.appendChild(radioOui);
+            champs.appendChild(labelOui);
 
-            bloc.appendChild(radioNon);
-            bloc.appendChild(labelNon);
+            champs.appendChild(radioNon);
+            champs.appendChild(labelNon);
 
             const validateButton = document.createElement("button");
             validateButton.textContent = "Valider";
+            validateButton.type = "button";
 
-            bloc.appendChild(validateButton);
+            champs.appendChild(validateButton);
 
             validateButton.addEventListener("click", function() {
 
@@ -133,7 +142,7 @@ buttonAddQuestion.addEventListener("click", function() {
                 if (radioNon.checked) {
                     answer = "Non";
                 }
-                
+
                 // envoyer la question et la réponse au serveur
                 fetch("/questions/add", {
                     method: "POST",
@@ -147,17 +156,13 @@ buttonAddQuestion.addEventListener("click", function() {
                     })
                 })
 
-                /* DEBUG : affiche question reponse
-                bloc.innerHTML = "";
-
-                const questionText = document.createElement("p");
-                questionText.textContent = "Question : " + question;
-
-                const answerText = document.createElement("p");
-                answerText.textContent = "Réponse : " + answer;
-
-                bloc.appendChild(questionText);
-                bloc.appendChild(answerText);*/
+                select.remove();
+                questionInput.remove();
+                radioOui.remove();
+                labelOui.remove();
+                radioNon.remove();
+                labelNon.remove();
+                validateButton.remove();
 
             });
 
@@ -169,7 +174,7 @@ buttonAddQuestion.addEventListener("click", function() {
             questionInput.type = "text";
             questionInput.placeholder = "Ecris la question";
 
-            bloc.appendChild(questionInput);
+            champs.appendChild(questionInput);
 
             const answers = [];
 
@@ -188,7 +193,7 @@ buttonAddQuestion.addEventListener("click", function() {
                 line.appendChild(radio);
                 line.appendChild(answerInput);
 
-                bloc.appendChild(line);
+                champs.appendChild(line);
 
                 answers.push({
                     radio: radio,
@@ -198,8 +203,9 @@ buttonAddQuestion.addEventListener("click", function() {
 
             const validateButton = document.createElement("button");
             validateButton.textContent = "Valider";
+            validateButton.type = "button";
 
-            bloc.appendChild(validateButton);
+            champs.appendChild(validateButton);
 
             validateButton.addEventListener("click", function() {
 
@@ -234,28 +240,13 @@ buttonAddQuestion.addEventListener("click", function() {
                     })
                 })
 
-                /* DEBUG : affiche question reponse
-                const questionText = document.createElement("p");
-                questionText.textContent = "Question : " + question;
-
-                bloc.innerHTML = "";
-
-                bloc.appendChild(questionText);
-
-                toutesReponses.forEach(function(rep) {
-
-                    const p = document.createElement("p");
-
-                    if (rep === bonneReponse) {
-                        p.textContent = "✔ " + rep;
-                    }
-                    else {
-                        p.textContent = rep;
-                    }
-
-                    bloc.appendChild(p);
-
-                });*/
+                select.remove();
+                questionInput.remove();
+                answers.forEach(function(answer) {
+                    answer.input.remove();
+                    answer.radio.remove();
+                });
+                validateButton.remove();
 
             });
 
