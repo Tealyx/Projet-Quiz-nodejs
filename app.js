@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, 'views')); //Définie le nom qui sera util
 
 
 app.use(express.static(path.join(__dirname,"public"))); //Permet d'automatiquement load ces fichiers. Pour utiliser les fichiers de public dans d'autres fichiers il sera uniquement nécessaire de les appeler depuis la racine public
-
+app.use(express.json()); //Permet de parser les données reçues en JSON, c'est à dire de les convertir en objet utilisable en JS
 
 
 app.get('/bdd',(req,res)=>{ //Attribut à l'adresse /about le fichier about se trouvant dans le dossier "views". Si le dossier ne s'appelle pas "views" il faudra préciser le chemin. 
@@ -66,16 +66,34 @@ app.post("/addUser",(req,res)=>{
 });
 
 // route pour ajouter une question à la base de données
-app.post("/addQuestion", (req, res) => {
+app.post("/questions/add", (req, res) => {
 
-    console.log(req.body);
+    const question = req.body.question;
+    const type = req.body.type;
+    const bonne_reponse = req.body.bonne_reponse;
 
-    res.send("ok");
+    db.query(
+        "INSERT INTO questions (titre_question, type, bonne_reponse) VALUES (?, ?, ?)",
+        [question, type, bonne_reponse],
+
+        function(err, result) {
+
+            if (err) {
+                console.log(err);
+                res.status(500).send("erreur db");
+                return;
+            }
+
+            console.log("question ajoutée id =", result.insertId);
+
+            res.send("question enregistrée");
+
+        }
+    );
 
 });
 
-
-
+// Connexion à la base de données MySQL
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",

@@ -78,6 +78,9 @@ buttonAddQuestion.addEventListener("click", function() {
                         bonne_reponse: answer
                     })
                 })
+
+                console.log(question, answer);
+                
             });
 
         }
