@@ -58,8 +58,14 @@ buttonAddQuestion.addEventListener("click", function() {
 
                 const question = questionInput.value;
                 const answer = answerInput.value;
-
-
+                const questionText = document.createElement("p");
+                const answerText = document.createElement("p");
+                
+                questionInput.remove();
+                answerInput.remove();
+                validateButton.remove();
+                select.remove();
+                
                 // envoyer la question et la réponse au serveur
                 fetch("/questions/add", {
                     method: "POST",
@@ -72,18 +78,6 @@ buttonAddQuestion.addEventListener("click", function() {
                         bonne_reponse: answer
                     })
                 })
-                /* Affiche questions reponses pour DEBUG
-                const questionText = document.createElement("p");
-                questionText.textContent = "Question : " + question;
-
-                const answerText = document.createElement("p");
-                answerText.textContent = "Réponse : " + answer;
-
-                questionInput.replaceWith(questionText);
-                answerInput.replaceWith(answerText);*/
-
-                validateButton.remove();
-
             });
 
         }
@@ -136,7 +130,21 @@ buttonAddQuestion.addEventListener("click", function() {
                 if (radioNon.checked) {
                     answer = "Non";
                 }
+                
+                // envoyer la question et la réponse au serveur
+                fetch("/questions/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        type: "fermee",
+                        bonne_reponse: answer
+                    })
+                })
 
+                /* DEBUG : affiche question reponse
                 bloc.innerHTML = "";
 
                 const questionText = document.createElement("p");
@@ -146,7 +154,7 @@ buttonAddQuestion.addEventListener("click", function() {
                 answerText.textContent = "Réponse : " + answer;
 
                 bloc.appendChild(questionText);
-                bloc.appendChild(answerText);
+                bloc.appendChild(answerText);*/
 
             });
 
@@ -209,6 +217,21 @@ buttonAddQuestion.addEventListener("click", function() {
 
                 }
 
+                // envoyer la question et la réponse au serveur
+                fetch("/questions/add", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        type: "qcm",
+                        toutes_reponses: toutesReponses,
+                        bonne_reponse: bonneReponse
+                    })
+                })
+
+                /* DEBUG : affiche question reponse
                 const questionText = document.createElement("p");
                 questionText.textContent = "Question : " + question;
 
@@ -229,7 +252,7 @@ buttonAddQuestion.addEventListener("click", function() {
 
                     bloc.appendChild(p);
 
-                });
+                });*/
 
             });
 
