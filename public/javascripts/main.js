@@ -36,7 +36,7 @@ buttonAddQuestion.addEventListener("click", function() {
 
     bloc.appendChild(champs);
 
-    const zone = document.getElementById("zoneQuestions");
+    const zone = document.getElementById("zoneCreation");
     zone.appendChild(bloc);
 
     // quand on choisit un type
@@ -248,6 +248,108 @@ buttonAddQuestion.addEventListener("click", function() {
                 });
                 validateButton.remove();
 
+            });
+
+        }
+
+    });
+
+});
+
+const btnRandom = document.getElementById("btnRandom");
+
+btnRandom.addEventListener("click", function() {
+
+    fetch("/questions/random")
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        const zone = document.getElementById("zoneAffichage");
+        zone.innerHTML = "";
+
+        const question = document.createElement("h2");
+        question.textContent = data.titre_question;
+        zone.appendChild(question);
+
+        // zone résultat
+        const result = document.createElement("p");
+        zone.appendChild(result);
+
+        //QUESTION OUVERTE
+        if (data.type === "ouverte") {
+
+            const input = document.createElement("input");
+            input.placeholder = "Votre réponse";
+
+            const btn = document.createElement("button");
+            btn.textContent = "Valider";
+
+            btn.addEventListener("click", function() {
+
+                if (input.value.toLowerCase() === data.bonne_reponse.toLowerCase()) {
+                    result.textContent = "Bonne réponse";
+                } else {
+                    result.textContent = "Mauvaise réponse | Réponse : " + data.bonne_reponse;
+                }
+
+                input.disabled = true;
+                btn.disabled = true;
+            });
+
+            zone.appendChild(input);
+            zone.appendChild(btn);
+        }
+
+        //QUESTION FERMÉE
+        if (data.type === "fermee") {
+
+            const oui = document.createElement("button");
+            const non = document.createElement("button");
+
+            oui.textContent = "Oui";
+            non.textContent = "Non";
+
+            function check(rep) {
+                if (rep === data.bonne_reponse) {
+                    result.textContent = "Bonne réponse";
+                } else {
+                    result.textContent = "Mauvaise | Réponse : " + data.bonne_reponse;
+                }
+
+                oui.disabled = true;
+                non.disabled = true;
+            }
+
+            oui.addEventListener("click", () => check("Oui"));
+            non.addEventListener("click", () => check("Non"));
+
+            zone.appendChild(oui);
+            zone.appendChild(non);
+        }
+
+        // ===== QCM =====
+        if (data.type === "qcm") {
+
+            data.reponses.forEach(rep => {
+
+                const btn = document.createElement("button");
+                btn.textContent = rep.texte_reponse;
+
+                btn.addEventListener("click", function() {
+
+                    if (rep.texte_reponse === data.bonne_reponse) {
+                        result.textContent = "Bonne réponse";
+                    } else {
+                        result.textContent = "Mauvaise | Réponse : " + data.bonne_reponse;
+                    }
+
+                    // désactiver tous les boutons
+                    const buttons = zone.querySelectorAll("button");
+                    buttons.forEach(b => b.disabled = true);
+
+                });
+
+                zone.appendChild(btn);
             });
 
         }

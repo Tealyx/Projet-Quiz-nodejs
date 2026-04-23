@@ -52,16 +52,29 @@ app.get('/register', (req,res) =>{
   });
 });
 
-// route pour ajouter un utilisateur à la base de données
-app.post("/addUser",(req,res)=>{
+// route pour récupérer une question aléatoire
+app.get("/questions/random", (req, res) => {
 
-  ajout_utilisateur(
-    req.body.username,
-    req.body.email,
-    req.body.password
-  );
+    db.query("SELECT * FROM questions ORDER BY RAND() LIMIT 1", (err, result) => {
 
-  res.send("ok");
+        const question = result[0];
+
+        if (question.type !== "qcm") {
+            return res.json(question);
+        }
+
+        db.query(
+            "SELECT * FROM reponses WHERE question_id = ?",
+            [question.id],
+            (err2, reponses) => {
+
+                question.reponses = reponses;
+
+                res.json(question);
+            }
+        );
+
+    });
 
 });
 
@@ -71,22 +84,42 @@ app.post("/questions/add", (req, res) => {
     const question = req.body.question;
     const type = req.body.type;
     const bonne_reponse = req.body.bonne_reponse;
+    const toutes_reponses = req.body.toutes_reponses;
 
+    //insérer la question
     db.query(
         "INSERT INTO questions (titre_question, type, bonne_reponse) VALUES (?, ?, ?)",
         [question, type, bonne_reponse],
-
         function(err, result) {
 
             if (err) {
                 console.log(err);
-                res.status(500).send("erreur db");
-                return;
+                return res.status(500).send("Erreur DB");
             }
 
-            console.log("question ajoutée id =", result.insertId);
+            const questionId = result.insertId;
 
-            res.send("question enregistrée");
+            //si ce n'est pas un QCM -> fini
+            if (type !== "qcm") {
+                return res.send("Question ajoutée");
+            }
+
+            //si QCM → insérer les réponses
+            const values = toutes_reponses.map(rep => [questionId, rep]);
+
+            db.query(
+                "INSERT INTO reponses (question_id, texte_reponse) VALUES ?",
+                [values],
+                function(err2) {
+
+                    if (err2) {
+                        console.log(err2);
+                        return res.status(500).send("Erreur DB réponses");
+                    }
+
+                    res.send("QCM ajouté");
+                }
+            );
 
         }
     );
@@ -105,27 +138,6 @@ db.connect(function(err) {
   if (err) throw err;
   console.log("Connecté à MySQL !");
 });
-
-const ajout_utilisateur = function(username, email, password) {
-
-  db.query(
-    "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
-    [username, email, password],
-
-    function(err, result) {
-
-      if (err) {
-        console.log(err);
-        return;
-      }
-
-      console.log("Utilisateur ajouté !");
-    }
-
-  );
-
-};
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
